@@ -1,0 +1,73 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <mvc:annotation-driven/>
+
+    <!--  <mvc:resources mapping="/resources/**" location="/resources/"/> -->
+
+	
+	<mvc:resources mapping="/WEB-INF/**" location="/WEB-INF/"/>
+
+<bean name="sw_resourceHandler" class="org.springframework.web.servlet.resource.ResourceHttpRequestHandler">
+ <property name="locations">
+  <list>  
+   <value>/WEB-INF/</value>        
+   <value>file:/softwares/promote/</value>
+   <value>classpath:/META-INF/</value>
+   
+ </list>
+ </property>
+</bean>
+<bean name="js_resourceHandler" class="org.springframework.web.servlet.resource.ResourceHttpRequestHandler">
+ <property name="locations">
+  <list>  
+   <value>/WEB-INF/js/</value>        
+   <value>file:/softwares/promote/js/</value>
+   <value>classpath:/META-INF/js/</value>
+   
+ </list>
+ </property>
+</bean>
+<bean name="css_resourceHandler" class="org.springframework.web.servlet.resource.ResourceHttpRequestHandler">
+ <property name="locations">
+  <list> 
+   <value>/WEB-INF/css/</value>         
+   <value>file:/softwares/promote/css/</value>
+   <value>classpath:/META-INF/css/</value>
+   
+ </list>
+ </property>
+</bean>
+
+<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+ <property name="urlMap">
+  <map>
+   <entry key="/js/**" value-ref="js_resourceHandler"/>
+   <entry key="/**" value-ref="sw_resourceHandler"/>
+   <entry key="/css/**" value-ref="css_resourceHandler"/>
+
+  </map>
+ </property>
+</bean>
+
+	
+    <bean id="templateResolver"
+          class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+        <property name="prefix" value="/WEB-INF/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML5" />
+    </bean>
+
+    <bean id="templateEngine"
+          class="org.thymeleaf.spring5.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />
+    </bean>
+
+    <bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine" />
+    </bean>
+
+</beans>
